@@ -50,3 +50,11 @@ describe 'promises support', ->
     compiled = path.join(@public, '_redirects')
     expected = path.join(@public, 'expected', '_redirects')
     h.file.matches_file(compiled, expected).should.be.true
+
+describe 'custom output directory', ->
+
+  before (done) -> compile_fixture.call(@, 'outdir', -> done())
+
+  it 'compiles basic project to custom directory', ->
+    p = path.join(@public, '/customdir/index.html')
+    h.file.exists(p).should.be.ok

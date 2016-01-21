@@ -13,6 +13,7 @@ module.exports = (opts) ->
     setup: ->
       W(opts).with(@)
         .then (opts) ->
+          opts.outdir ?= ''
           @opts = _.defaults(opts, {redirects: {}, rewrites: {}, headers: {}})
         .then ->
           W.all([write_headers.call(@), write_redirects.call(@)])
@@ -23,7 +24,7 @@ module.exports = (opts) ->
         str += "  #{k}: #{v}\n" for k, v of conf
         return str
       , ''
-      @util.write '_headers', res
+      @util.write path.join(@opts.outdir, '_headers'), res
 
     write_redirects = ->
       redirects = _.pick(@opts.redirects, codes)
@@ -37,4 +38,4 @@ module.exports = (opts) ->
           str += "#{k} #{v} #{code}\n"
         return str
       , ''
-      @util.write '_redirects', res
+      @util.write path.join(@opts.outdir, '_redirects'), res
